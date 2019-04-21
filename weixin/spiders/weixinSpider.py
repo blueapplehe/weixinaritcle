@@ -32,6 +32,7 @@ class WeixinSpider(scrapy.Spider):
         publish_time=response.xpath('//em[@id="publish_time"]/text()').extract_first()
         js_name=response.xpath('//div[@id="meta_content"]//a[@id="js_name"]/text()').extract_first()
         content=response.xpath('//div[@id="js_content"]').extract_first()
+        imgs=response.xpath('//div[@id="js_content"]//img/@data-src').extract()
         
         title=title.replace('\n','').strip(' ')
         js_name=js_name.replace('\n','').strip(' ')
@@ -42,6 +43,7 @@ class WeixinSpider(scrapy.Spider):
         article["js_name"]=js_name
         article["publish_time"]=publish_time
         article["content"]=content
+        article["image_urls"]=imgs
         yield article
 
         

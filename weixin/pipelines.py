@@ -44,4 +44,36 @@ class MongoDBPipeline():
             return item
         else:
             print("title为空"+title)
+
+class DownloadImagePipeline(ImagesPipeline):
+    def get_media_requests(self,item,info):
+        image_urls=item["image_urls"]
+        for image_url in image_urls:
+            yield scrapy.Request(url=image_url,meta={'is_image': True})
+
+    def item_completed(self, results, item, info):
+        image_paths = [x['path'] for ok, x in results if ok]
+        if not image_paths:
+            #raise DropItem("Item contains no images")
+            return item
+        IMAGES_STORE=settings.get('IMAGES_STORE')
+        img_paths=[]
+        i=1
+        for image_path in image_paths:
+            target_path="/data/weixinimages"
+            name_dir=target_path+"/"+item["title"]
+            if not os.path.exists(name_dir):
+                os.mkdir(name_dir)
+            origin_file=IMAGES_STORE+"/"+image_path
+            filename = os.path.basename(origin_file)
+            ext=filename.split(".")[1]
+            ext=ext.lower()
+            if ext!="jpg" and ext!="png" and ext!="jpeg":
+                return item 
+            target_file=name_dir+"/"+str(i)+"."+ext
+            i=i+1
+            shutil.copyfile(origin_file,target_file)
+            img_paths.append(target_file)
+        item["images_paths"]=img_paths
+        return item
     

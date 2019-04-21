@@ -21,14 +21,6 @@ class ArticleItem(scrapy.Item):
     publish_time = scrapy.Field()
     js_name = scrapy.Field()
     content=scrapy.Field()
-
-class ImageItemDetail(scrapy.Item):
-    # define the fields for your item here like:
-    name = scrapy.Field()
-    search_word = scrapy.Field()
-    image_url=scrapy.Field()
-    image_urls = scrapy.Field()
-    images = scrapy.Field()
-    referer=scrapy.Field()
-    img_path=scrapy.Field()
-    detail_url=scrapy.Field()
+    image_urls=scrapy.Field()
+    images_paths=scrapy.Field()
+    
