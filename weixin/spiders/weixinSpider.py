@@ -6,10 +6,10 @@ class WeixinSpider(scrapy.Spider):
     name='weixin'
     start_urls=[]
     def start_requests(self):
-        search_words=["易美居"]
+        search_words=["广东发布"]
         for search_word in search_words:
             print(search_word)
-            url="https://www.sogou.com/web?query="+search_word+"微信公众号"
+            url="https://www.sogou.com/web?query="+search_word+"的微信公众号"
             request=scrapy.Request(url,callback=self.parse,meta={'search_word':search_word})#meta传递额外参数
             yield request
     def parse(self,response):
